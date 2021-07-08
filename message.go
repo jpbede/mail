@@ -19,6 +19,8 @@ type Message struct {
 	hEncoder    mimeEncoder
 	buf         bytes.Buffer
 	boundary    string
+
+	multipartType string
 }
 
 type header map[string][]string
@@ -101,6 +103,10 @@ const (
 // SetBoundary sets a custom multipart boundary.
 func (m *Message) SetBoundary(boundary string) {
 	m.boundary = boundary
+}
+
+func (m *Message) SetCustomMultipartType(multipartType string) {
+	m.multipartType = multipartType
 }
 
 // SetHeader sets a value to the given header field.

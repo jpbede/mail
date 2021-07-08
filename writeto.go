@@ -27,16 +27,18 @@ func (w *messageWriter) writeMessage(m *Message) {
 	}
 	w.writeHeaders(m.header)
 
-	if m.hasMixedPart() {
-		w.openMultipart("mixed", m.boundary)
-	}
-
-	if m.hasRelatedPart() {
-		w.openMultipart("related", m.boundary)
-	}
-
-	if m.hasAlternativePart() {
-		w.openMultipart("alternative", m.boundary)
+	if m.multipartType == "" {
+		if m.hasMixedPart() {
+			w.openMultipart("mixed", m.boundary)
+		}
+		if m.hasRelatedPart() {
+			w.openMultipart("related", m.boundary)
+		}
+		if m.hasAlternativePart() {
+			w.openMultipart("alternative", m.boundary)
+		}
+	} else {
+		w.openMultipart(m.multipartType, m.boundary)
 	}
 	for _, part := range m.parts {
 		w.writePart(part, m.charset)
